@@ -1,0 +1,65 @@
+<nz-table [nzData]="listOfData"
+          [nzLoading]="loading"
+          [nzBordered]="true"
+          [nzFrontPagination]="false"
+          [nzScroll]="{ x: '1200px' }"
+>
+  <thead>
+    <tr>
+      <th nzResizable nzShowSort [(nzSortOrder)]="sortMap['id']" (nzSortOrderChange)="sort('id', $event)" style="width: 80px;">
+        Id
+      </th>
+
+      <th nzResizable nzShowSort [(nzSortOrder)]="sortMap['text']" (nzSortOrderChange)="sort('text', $event)" style="width: 200px;">
+        Text
+        <br />
+        <input nz-input placeholder="Filter text" [(ngModel)]="filters.text" (ngModelChange)="loadData()" />
+      </th>
+
+      <th nzResizable nzShowSort [(nzSortOrder)]="sortMap['user']" (nzSortOrderChange)="sort('user', $event)" style="width: 180px;">
+        User
+        <br />
+        <input nz-input placeholder="Filter user" [(ngModel)]="filters.userId" (ngModelChange)="loadData()" />
+      </th>
+
+      <th nzResizable nzShowSort [(nzSortOrder)]="sortMap['dt']" (nzSortOrderChange)="sort('dt', $event)" style="width: 150px;">
+        Date
+        <br />
+        <input nz-input type="date" [(ngModel)]="filters.dateFrom" (ngModelChange)="loadData()" />
+      </th>
+
+      <th nzResizable nzShowSort [(nzSortOrder)]="sortMap['eventtype']" (nzSortOrderChange)="sort('eventtype', $event)" style="width: 150px;">
+        Event Type
+        <br />
+        <input nz-input type="number" min="1" max="3" placeholder="1=Login,2=Logout,3=Purchase" [(ngModel)]="filters.eventTypeId" (ngModelChange)="loadData()" />
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of listOfData || []">
+      <td>{{ item.id }}</td>
+      <td>{{ item.text }}</td>
+      <td>{{ item.userFullName }}</td>
+      <td>{{ item.dt | date:'short' }}</td>
+      <td>{{ item.eventTypeName }}</td>
+    </tr>
+
+    <tr *ngIf="!listOfData || listOfData.length === 0">
+      <td colspan="5" class="text-center">No Data</td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-pagination [nzPageIndex]="pageIndex"
+               [nzPageSize]="pageSize"
+               [nzTotal]="total"
+               [nzShowSizeChanger]="true"
+               [nzPageSizeOptions]="[10,20,50]"
+               (nzPageIndexChange)="onPageIndexChange($event)"
+               (nzPageSizeChange)="onPageSizeChange($event)">
+</nz-pagination>
+
+<div class="table-info">
+  Всего записей: {{ total }} | Всего страниц: {{ totalPages }}
+</div>
